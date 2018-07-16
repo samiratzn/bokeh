@@ -179,8 +179,8 @@ export class PlotCanvasView extends DOMView {
     this._initial_state_info = {
       selection: {},                   // XXX: initial selection?
       dimensions: {
-        width: this.model.canvas._width.value,
-        height: this.model.canvas._height.value,
+        width: this.model._width.value,
+        height: this.model._height.value,
       },
     }
 
@@ -255,7 +255,7 @@ export class PlotCanvasView extends DOMView {
       // Clipping
       gl.enable(gl.SCISSOR_TEST)
       const [sx, sy, w, h] = frame_box
-      const {xview, yview} = this.model.canvas
+      const {xview, yview} = this.model
       const vx = xview.compute(sx)
       const vy = yview.compute(sy + h)
       gl.scissor(ratio*vx, ratio*vy, ratio*w, ratio*h) // lower left corner, width, height
@@ -693,8 +693,8 @@ export class PlotCanvasView extends DOMView {
       this.model.plot.setv({
         inner_width: Math.round(this.frame._width.value),
         inner_height: Math.round(this.frame._height.value),
-        layout_width: Math.round(this.canvas._width.value),
-        layout_height: Math.round(this.canvas._height.value),
+        layout_width: Math.round(this.model._width.value),
+        layout_height: Math.round(this.model._height.value),
       }, {no_change: true})
 
       // XXX: can't be @request_paint(), because it would trigger back-and-forth
@@ -865,10 +865,10 @@ export class PlotCanvasView extends DOMView {
       let [x0, y0, w, h] = frame_box
       // XXX: shrink outline region by 1px to make right and bottom lines visible
       // if they are on the edge of the canvas.
-      if (x0 + w == this.canvas._width.value) {
+      if (x0 + w == this.model._width.value) {
         w -= 1
       }
-      if (y0 + h == this.canvas._height.value) {
+      if (y0 + h == this.model._height.value) {
         h -= 1
       }
       ctx.strokeRect(x0, y0, w, h)
@@ -933,7 +933,7 @@ export class PlotCanvasView extends DOMView {
   protected _map_hook(_ctx: Context2d, _frame_box: FrameBox): void {}
 
   protected _paint_empty(ctx: Context2d, frame_box: FrameBox): void {
-    const [cx, cy, cw, ch] = [0, 0, this.canvas_view.model._width.value, this.canvas_view.model._height.value]
+    const [cx, cy, cw, ch] = [0, 0, this.model._width.value, this.model._height.value]
     const [fx, fy, fw, fh] = frame_box
 
     ctx.clearRect(cx, cy, cw, ch)
