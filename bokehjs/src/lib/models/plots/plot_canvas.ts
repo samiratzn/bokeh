@@ -776,8 +776,10 @@ export class PlotCanvasView extends DOMView {
   protected _right_panel_size?: number = 0
 
   update_constraints(): void {
-    const width = this.model.plot._width.value
-    const height = this.model.plot._height.value
+    const {plot} = this.model
+
+    const width = plot._width.value
+    const height = plot._height.value
 
     if (width <= 0 || height <= 0)
       return
@@ -801,7 +803,7 @@ export class PlotCanvasView extends DOMView {
     this.solver.suggest_value(this.model._inner_width, width)
     this.solver.suggest_value(this.model._inner_height, height)
 
-    const above_panel_size = this.above_panel.get_size()
+    const above_panel_size = Math.max(this.above_panel.get_size(), plot.min_border_top!)
     if (this._above_panel_size !== above_panel_size) {
       if (this._inner_top_constraint != null && this.solver.has_constraint(this._inner_top_constraint)) {
         this.solver.remove_constraint(this._inner_top_constraint)
@@ -815,7 +817,7 @@ export class PlotCanvasView extends DOMView {
       }
     }
 
-    const below_panel_size = this.below_panel.get_size()
+    const below_panel_size = Math.max(this.below_panel.get_size(), plot.min_border_bottom!)
     if (this._below_panel_size !== below_panel_size) {
       if (this._offset_bottom_constraint != null && this.solver.has_constraint(this._offset_bottom_constraint)) {
         this.solver.remove_constraint(this._offset_bottom_constraint)
@@ -829,7 +831,7 @@ export class PlotCanvasView extends DOMView {
       }
     }
 
-    const left_panel_size = this.left_panel.get_size()
+    const left_panel_size = Math.max(this.left_panel.get_size(), plot.min_border_left!)
     if (this._left_panel_size !== left_panel_size) {
       if (this._inner_left_constraint != null && this.solver.has_constraint(this._inner_left_constraint)) {
         this.solver.remove_constraint(this._inner_left_constraint)
@@ -843,7 +845,7 @@ export class PlotCanvasView extends DOMView {
       }
     }
 
-    const right_panel_size = this.right_panel.get_size()
+    const right_panel_size = Math.max(this.right_panel.get_size(), plot.min_border_right!)
     if (this._right_panel_size !== right_panel_size) {
       if (this._offset_right_constraint != null && this.solver.has_constraint(this._offset_right_constraint)) {
         this.solver.remove_constraint(this._offset_right_constraint)
@@ -1206,10 +1208,6 @@ export class PlotCanvas extends LayoutCanvas {
       EQ(this._offset_bottom, [-1, this._bottom], this._inner_bottom),
       EQ(this._offset_right,  [-1, this._right], this._inner_right),
 
-      GE(this._inner_top,     -this.plot.min_border_top!   ),
-      GE(this._inner_left,    -this.plot.min_border_left!  ),
-      GE(this._offset_bottom, -this.plot.min_border_bottom!),
-      GE(this._offset_right,  -this.plot.min_border_right! ),
       // other constraints are added in update_constraints()
     ]
   }
