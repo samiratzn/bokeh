@@ -332,16 +332,12 @@ export abstract class LayoutDOMView extends DOMView {
     this.connect(this.model.properties.sizing_mode.change, () => this.layout())
   }
 
-  _render_classes(): void {
+  protected _render_classes(): void {
     this.el.className = "" // removes all classes
 
-    for (const name of this.css_classes())
+    const css_classes = this.css_classes().concat(this.model.css_classes)
+    for (const name of css_classes)
       this.el.classList.add(name)
-
-    this.el.classList.add(`bk-layout-${this.model.sizing_mode}`)
-
-    for (const cls of this.model.css_classes)
-      this.el.classList.add(cls)
   }
 
   render(): void {
