@@ -9,11 +9,6 @@ export class MultiSelectView extends InputWidgetView {
 
   protected selectEl: HTMLSelectElement
 
-  initialize(options: any): void {
-    super.initialize(options)
-    this.render()
-  }
-
   connect_signals(): void {
     super.connect_signals()
     this.connect(this.model.properties.value.change, () => this.render_selection())

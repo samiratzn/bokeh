@@ -9,11 +9,6 @@ export class TextInputView extends InputWidgetView {
 
   protected inputEl: HTMLInputElement
 
-  initialize(options: any): void {
-    super.initialize(options)
-    this.render()
-  }
-
   connect_signals(): void {
     super.connect_signals()
     this.connect(this.model.change, () => this.render())
