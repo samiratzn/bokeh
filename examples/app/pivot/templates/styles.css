@@ -10,9 +10,6 @@ body {
     margin-bottom: 20px;
     font-size: 10pt;
 }
-.bk-plot-layout{
-    display: inline-block;
-}
 .filter,
 .filters-update,
 .adjust-drop{
