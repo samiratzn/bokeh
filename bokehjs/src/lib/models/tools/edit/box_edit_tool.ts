@@ -38,7 +38,7 @@ export class BoxEditToolView extends EditToolView {
   _set_extent([sx0, sx1]: [number, number], [sy0, sy1]: [number, number],
               append: boolean, emit: boolean = false): void {
     const renderer = this.model.renderers[0];
-    const frame = this.plot_model.frame;
+    const frame = this.plot_view.frame;
     // Type once dataspecs are typed
     const glyph: any = renderer.glyph;
     const cds = renderer.data_source;
@@ -70,7 +70,7 @@ export class BoxEditToolView extends EditToolView {
   _update_box(ev: UIEvent, append: boolean = false, emit: boolean = false): void {
     if (this._draw_basepoint == null) { return; }
     const curpoint: [number, number] = [ev.sx, ev.sy];
-    const frame = this.plot_model.frame;
+    const frame = this.plot_view.frame;
     const dims = this.model.dimensions;
     const limits = this.model._get_dim_limits(this._draw_basepoint, curpoint, frame, dims);
     if (limits != null) {
